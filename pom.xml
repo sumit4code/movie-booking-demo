@@ -32,6 +32,7 @@
 
         <commons-lang3.version>3.11</commons-lang3.version>
         <swagger.version>3.0.0</swagger.version>
+        <micrometer.version>1.7.0</micrometer.version>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>

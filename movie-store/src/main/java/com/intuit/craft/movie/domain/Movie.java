@@ -9,12 +9,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
 @Document(collection = "movie_store")
-public class Movie {
+public class Movie implements Serializable {
     @Id
     private String id;
 

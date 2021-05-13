@@ -7,13 +7,17 @@ import com.intuit.craft.movie.repository.MovieRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @AllArgsConstructor
 @Service
 public class MovieService {
-    
+    public static final String CACHE_NAME = "movieCache";
+
     private final MovieRepository movieRepository;
 
     public Movie create(Movie movie) {
@@ -25,6 +29,7 @@ public class MovieService {
         return savedMovie;
     }
 
+    @CachePut(value = CACHE_NAME, key = "#movie.id")
     public Movie update(Movie movie) {
         if (movieRepository.existsById(movie.getId())) {
             return movieRepository.save(movie);
@@ -34,10 +39,13 @@ public class MovieService {
 
     }
 
+    @Cacheable(value = CACHE_NAME, key = "#movieId")
     public Movie get(String movieId) {
+        log.info("requesting for movie id {}", movieId);
         return movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException("Entity not found with id :" + movieId));
     }
 
+    @CacheEvict(value = CACHE_NAME, key = "#movieId")
     public void delete(String movieId) {
         if (movieRepository.existsById(movieId)) {
             movieRepository.deleteById(movieId);
