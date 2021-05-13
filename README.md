@@ -31,9 +31,9 @@ Below modules have been identified as key module. Module description is given be
 ## API Documentation
 
 ### Service : movie-store
-```sh
+
 ![Screenshot](./evidence/movie-store-api.png)
-```
+
 
 ## License
 
