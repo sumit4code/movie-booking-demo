@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,6 +18,7 @@ public class Movie {
     @Id
     private String id;
 
+    @NotNull(message = "name can't be empty")
     @Field(name = "name")
     private String name;
 

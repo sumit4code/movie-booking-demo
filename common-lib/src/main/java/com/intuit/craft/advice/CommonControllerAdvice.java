@@ -32,7 +32,7 @@ public class CommonControllerAdvice extends ResponseEntityExceptionHandler {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("message", "Already entity present");
-        log.error("Entity present already {}", NestedExceptionUtils.getMostSpecificCause(ex).getMessage());
+        log.error("Entity present already :: {}", NestedExceptionUtils.getMostSpecificCause(ex).getMessage());
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
@@ -41,7 +41,7 @@ public class CommonControllerAdvice extends ResponseEntityExceptionHandler {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("message", "Entity not found");
-        log.error("Entity not found {}", NestedExceptionUtils.getMostSpecificCause(ex).getMessage());
+        log.error("Entity not found :: {}", NestedExceptionUtils.getMostSpecificCause(ex).getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
