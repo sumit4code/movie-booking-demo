@@ -1,0 +1,22 @@
+{
+  "eventEndDate": "2021-06-28",
+  "eventId": "string",
+  "eventStartDate": "2021-06-21",
+  "locationId": "609fd863e280227ce9ad6268",
+  "schedules": [
+    {
+      "startTime": "12:30",
+      "endTime": "15:00"
+    },
+    {
+      "startTime": "15:15",
+      "endTime": "17:45"
+    },
+    {
+      "startTime": "18:00",
+      "endTime": "20:30"
+    }
+  ],
+  "screenId": 0,
+  "theaterId": "609fd913e280227ce9ad626e"
+}
