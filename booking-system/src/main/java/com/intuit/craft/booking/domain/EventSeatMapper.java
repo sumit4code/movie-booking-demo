@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@Document(collation = "event_seat_mapper")
+@Document(collection = "event_seat_mapper")
 @CompoundIndexes({
         @CompoundIndex(name = "event_subEvent", def = "{'eventId' : 1, 'subEventId': 1}")
 })

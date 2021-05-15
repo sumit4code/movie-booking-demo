@@ -21,7 +21,7 @@ public class GrantBookingRequestService {
 
     @Autowired
     public GrantBookingRequestService(RedisLockService redisLockService,
-                                      @Value("${booking.locking.time-in-seconds") Long lockDuration) {
+                                      @Value("${booking.locking.time-in-seconds}") Long lockDuration) {
         this.redisLockService = redisLockService;
         this.lockDuration = lockDuration;
     }
@@ -40,6 +40,7 @@ public class GrantBookingRequestService {
                 .collect(Collectors.toList());
         List<String> processedLockingKeys = new ArrayList<>(bookingRequest.getSeatNumbers().size());
         for (String lockKey : lockKeys) {
+            log.info("Locking request came for key {}", lockKey);
             if (redisLockService.tryLock(lockKey, lockDuration)) {
                 result = true;
                 processedLockingKeys.add(lockKey);
@@ -49,9 +50,12 @@ public class GrantBookingRequestService {
             }
         }
         if (!result) {
-            log.info("Releasing lock for seats {}", processedLockingKeys);
-            processedLockingKeys.forEach(redisLockService::unlock);
+            if(!processedLockingKeys.isEmpty()){
+                log.info("Releasing lock for seats {}", processedLockingKeys);
+                processedLockingKeys.forEach(redisLockService::unlock);
+            }
         }
+        log.info("process completed lock for seats {}", processedLockingKeys);
         publishForPartialBooking(bookingRequest);
         return result;
     }

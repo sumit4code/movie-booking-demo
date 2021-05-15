@@ -1,15 +1,21 @@
 package com.intuit.craft.booking.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 
-@Data
 @Builder
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class EventTask implements Serializable {
 
-    private final String eventId;
-    private final SubEvent subEvent;
-    private final Screen screen;
+    private String eventId;
+    private SubEvent subEvent;
+    private Screen screen;
 }

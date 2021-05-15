@@ -1,12 +1,16 @@
 package com.intuit.craft.theater.service;
 
 import com.intuit.craft.exception.ValidationException;
+import com.intuit.craft.kafka.EventMessage;
+import com.intuit.craft.kafka.MessageHeader;
+import com.intuit.craft.kafka.service.MessagePublisher;
 import com.intuit.craft.theater.domain.Event;
 import com.intuit.craft.theater.domain.EventDetail;
 import com.intuit.craft.theater.domain.Theater;
 import com.intuit.craft.theater.repository.EventRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +20,24 @@ import static com.intuit.craft.theater.helper.DateWiseEventHelper.createSubEvent
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class EventService {
 
+    private final String destinationTopic;
     private final LocationService locationService;
     private final TheaterService theaterService;
     private final EventRepository eventRepository;
-    private final PublishingService publishingService;
+    private final MessagePublisher messagePublisher;
+
+    @Autowired
+    public EventService(@Value("${kafka.message.destination.topic}") String destinationTopic,
+                        LocationService locationService, TheaterService theaterService,
+                        EventRepository eventRepository, MessagePublisher messagePublisher) {
+        this.destinationTopic = destinationTopic;
+        this.locationService = locationService;
+        this.theaterService = theaterService;
+        this.eventRepository = eventRepository;
+        this.messagePublisher = messagePublisher;
+    }
 
     public Event process(Event event) {
         log.info("Creating event");
@@ -33,8 +48,14 @@ public class EventService {
         Event savedEvent = eventRepository.save(event);
         log.info("Event has been created successfully");
         EventDetail eventDetail = EventDetail.from(savedEvent, theater);
-        publishingService.publish(eventDetail);
+        publishEvent(savedEvent, eventDetail);
         return savedEvent;
+    }
+
+    private void publishEvent(Event savedEvent, EventDetail eventDetail) {
+        MessageHeader messageHeader = MessageHeader.builder().topic(destinationTopic).messageId(savedEvent.getId()).build();
+        EventMessage eventMessage = new EventMessage(messageHeader, eventDetail);
+        messagePublisher.publish(eventMessage);
     }
 
     private void enrichSubEventList(Event event) {

@@ -132,85 +132,125 @@ services:
     command: mongod
     healthcheck:
       test: "exit 0"
-#  kafka-server:
-#    image: michaeldqin/kafka
-#    hostname: kafka-server
-#    ports:
-#      - "2181:2181"
-#      - "9092:9092"
-#    environment:
-#      - KAFKA_ADVERTISED_HOST_NAME='kafka-server'
-#      - ADVERTISED_LISTENERS=PLAINTEXT://kafka-server:9092
-#    volumes:
-#      - ${PWD}/.:/opt/kafka_2.12-1.0.0/log
-#    networks:
-#      - messaging_network
-#    logging:
-#      driver: json-file
+  kafka-server:
+    mem_limit: 800m
+    mem_reservation: 600M
+    cpus: 2
+    image: michaeldqin/kafka
+    container_name: "kafka-server"
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME='kafka-server'
+      - ADVERTISED_LISTENERS=PLAINTEXT://kafka-server:9092
+    volumes:
+      - ${PWD}/.:/opt/kafka_2.12-1.0.0/log
+    networks:
+      - messaging_network
+    logging:
+      driver: json-file
 
-#  movie-store:
-#    mem_limit: 256m
-#    mem_reservation: 60M
-#    cpus: 1
-#    build:
-#      context: ./movie-store/
-#      dockerfile: Dockerfile
-#    container_name: "movie_store"
-#    restart: always # This will be ignored if we deploy in docker swarm
-#    hostname: movie-store
-#    environment:
-#      - PROFILE=seed
-#      - MONGO_DB_HOSTNAME=mongodb-movie
-#      - MONGO_DB_USERNAME=intuit
-#      - MONGO_DB_PASSWORD=intuit123
-#      - MONGO_DB_NAME=movie
-#      - REDIS_HOST=10.0.0.11:7001,10.0.0.12:7002,10.0.0.13:7003,10.0.0.14:7004,10.0.0.15:7005,10.0.0.16:7006
-#    ports:
-#      - 8083:8083
-#    working_dir: /opt/app
-#    links:
-#      - mongodb-movie
-#    depends_on:
-#      - mongodb-movie
-#      - redis-cluster
-#    networks:
-#      - backend
-#      - redisnet
-#      - messaging_network
-#    healthcheck:
-#      test: "exit 0"
-#
-#  theater-manager:
-#    mem_limit: 256m
-#    mem_reservation: 60M
-#    cpus: 1
-#    build:
-#      context: ./theater-manager/
-#      dockerfile: Dockerfile
-#    container_name: "theater-manager"
-#    restart: always # This will be ignored if we deploy in docker swarm
-#    hostname: theater-manager
-#    environment:
-#      - PROFILE=seed
-#      - MONGO_DB_HOSTNAME=mongodb-movie
-#      - MONGO_DB_USERNAME=intuit
-#      - MONGO_DB_PASSWORD=intuit123
-#      - MONGO_DB_NAME=movie
-#      - REDIS_HOST=10.0.0.11:7001,10.0.0.12:7002,10.0.0.13:7003,10.0.0.14:7004,10.0.0.15:7005,10.0.0.16:7006
-#    ports:
-#      - 8084:8084
-#    working_dir: /opt/app
-#    links:
-#      - mongodb-movie
-#    depends_on:
-#      - mongodb-movie
-#      - redis-cluster
-#    networks:
-#      - backend
-#      - redisnet
-#      - messaging_network
-#    healthcheck:
-#      test: "exit 0"
+  movie-store:
+    mem_limit: 128m
+    mem_reservation: 60M
+    cpus: 1
+    build:
+      context: ./movie-store/
+      dockerfile: Dockerfile
+    container_name: "movie_store"
+    restart: always # This will be ignored if we deploy in docker swarm
+    hostname: movie-store
+    environment:
+      - PROFILE=seed
+      - MONGO_DB_HOSTNAME=mongodb-movie
+      - MONGO_DB_USERNAME=intuit
+      - MONGO_DB_PASSWORD=intuit123
+      - MONGO_DB_NAME=movie
+      - REDIS_HOST=10.0.0.11:7001,10.0.0.12:7002,10.0.0.13:7003,10.0.0.14:7004,10.0.0.15:7005,10.0.0.16:7006
+    ports:
+      - 8083:8083
+    working_dir: /opt/app
+    links:
+      - mongodb-movie
+    depends_on:
+      - mongodb-movie
+      - redis-cluster
+    networks:
+      - backend
+      - redisnet
+      - messaging_network
+    healthcheck:
+      test: "exit 0"
+
+  theater-manager:
+    mem_limit: 256m
+    mem_reservation: 60M
+    cpus: 1
+    build:
+      context: ./theater-manager/
+      dockerfile: Dockerfile
+    container_name: "theater-manager"
+    restart: always # This will be ignored if we deploy in docker swarm
+    hostname: theater-manager
+    environment:
+      - PROFILE=seed
+      - MONGO_DB_HOSTNAME=mongodb-movie
+      - MONGO_DB_USERNAME=intuit
+      - MONGO_DB_PASSWORD=intuit123
+      - MONGO_DB_NAME=movie
+      - REDIS_HOST=10.0.0.11:7001,10.0.0.12:7002,10.0.0.13:7003,10.0.0.14:7004,10.0.0.15:7005,10.0.0.16:7006
+      - KAFKA_HOST=kafka-server:9092
+    ports:
+      - 8084:8084
+    working_dir: /opt/app
+    links:
+      - mongodb-movie
+      - kafka-server:kafka-server
+    depends_on:
+      - mongodb-movie
+      - redis-cluster
+      - kafka-server
+    networks:
+      - backend
+      - redisnet
+      - messaging_network
+    healthcheck:
+      test: "exit 0"
+  booking-system:
+    mem_limit: 256m
+    mem_reservation: 60M
+    cpus: 1
+    build:
+      context: ./booking-system/
+      dockerfile: Dockerfile
+    container_name: "booking-system"
+    restart: always # This will be ignored if we deploy in docker swarm
+    hostname: booking-system
+    environment:
+      - PROFILE=seed
+      - MONGO_DB_HOSTNAME=mongodb-movie
+      - MONGO_DB_USERNAME=intuit
+      - MONGO_DB_PASSWORD=intuit123
+      - MONGO_DB_NAME=movie
+      - REDIS_HOST=10.0.0.11:7001,10.0.0.12:7002,10.0.0.13:7003,10.0.0.14:7004,10.0.0.15:7005,10.0.0.16:7006
+      - KAFKA_HOST=kafka-server:9092
+    ports:
+      - 8085:8085
+    working_dir: /opt/app
+    links:
+      - mongodb-movie
+      - kafka-server:kafka-server
+    depends_on:
+      - mongodb-movie
+      - redis-cluster
+      - kafka-server
+    networks:
+      - backend
+      - redisnet
+      - messaging_network
+    healthcheck:
+      test: "exit 0"
 
 
 volumes:

@@ -2,17 +2,21 @@ package com.intuit.craft.booking.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
 @Builder
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class EventDetail {
 
-    private final String eventId;
-    private final Screen screen;
-    private final List<SubEvent> subEvents;
+    private String eventId;
+    private Screen screen;
+    private List<SubEvent> subEvents;
 
 }

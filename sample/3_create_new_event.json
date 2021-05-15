@@ -1,6 +1,6 @@
 {
   "eventEndDate": "2021-06-28",
-  "eventId": "string",
+  "eventId": "1234",
   "eventStartDate": "2021-06-21",
   "locationId": "609fd863e280227ce9ad6268",
   "schedules": [
@@ -18,5 +18,5 @@
     }
   ],
   "screenId": 0,
-  "theaterId": "609fd913e280227ce9ad626e"
+  "theaterId": "60a009c43026ff3a15756804"
 }

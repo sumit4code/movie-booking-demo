@@ -1,16 +1,20 @@
 package com.intuit.craft.booking.domain;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Data
-@Builder
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SubEvent implements Serializable {
 
-    private final String subEventId;
-    private final LocalDateTime showStartTime;
-    private final LocalDateTime showEndTime;
+    private String subEventId;
+    private LocalDateTime showStartTime;
+    private LocalDateTime showEndTime;
 }

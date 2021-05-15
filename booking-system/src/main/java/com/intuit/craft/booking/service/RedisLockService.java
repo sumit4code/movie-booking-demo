@@ -20,6 +20,7 @@ public class RedisLockService {
     public boolean tryLock(String lockKey, long seconds) {
         Lock lock = obtainLock(lockKey);
         try {
+            log.info("After getting lock object");
             return lock.tryLock(seconds, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             return false;

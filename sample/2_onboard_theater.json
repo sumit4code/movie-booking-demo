@@ -6,10 +6,10 @@
     "email":"sumit4job@gmail.com",
     "number":"8861209282"
   },
-  "location":{
-    "id":"609fd863e280227ce9ad6268",
-    "country":"INDIA",
-    "city":"Bangalore"
+  "location":  {
+    "id": "609fd863e280227ce9ad6268",
+    "country": "INDIA",
+    "city": "Bangalore"
   },
   "name":"My Theater",
   "screen":[
