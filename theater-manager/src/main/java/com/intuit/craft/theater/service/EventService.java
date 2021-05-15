@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 import static com.intuit.craft.theater.helper.DateWiseEventHelper.createSubEvent;
 
 @Slf4j
@@ -35,7 +38,7 @@ public class EventService {
     }
 
     private void enrichSubEventList(Event event) {
-        event.setSubEvents(createSubEvent(event.getEventStartDate(), event.getEventStartDate(), event.getSchedules()));
+        event.setSubEvents(createSubEvent(event.getEventStartDate(), event.getEventEndDate(), event.getSchedules()));
     }
 
     private Theater retrieveTheaterInformation(Event event) {
@@ -46,6 +49,7 @@ public class EventService {
         if (theater.getScreen().stream().noneMatch(screen -> screen.getId() == event.getScreenId())) {
             throw new ValidationException("Invalid screen has been provided");
         }
+        log.debug("Successfully retrieved all the information from theater id {}", event.getTheaterId());
         return theater;
     }
 
@@ -55,5 +59,15 @@ public class EventService {
         if (!validLocation) {
             throw new ValidationException("Invalid location has been provided");
         }
+    }
+
+    public Optional<List<Event>> retrieveEvents(String locationId, String eventId) {
+        log.debug("Retrieving events based on location {} and eventId {}", locationId, eventId);
+        return eventRepository.findByLocationIdAndEventId(locationId, eventId);
+    }
+
+    public Optional<Optional<Event>> retrieveEvent(String id) {
+        log.debug("Retrieving specific event {}", id);
+        return Optional.of(eventRepository.findById(id));
     }
 }

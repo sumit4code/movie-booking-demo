@@ -8,6 +8,8 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -20,7 +22,10 @@ import java.util.List;
 
 @Data
 @Builder
-@Document(collation = "event_details")
+@CompoundIndexes({
+        @CompoundIndex(name = "location_subEvent", def = "{'locationId' : 1, 'eventId': 1}")
+})
+@Document(collection = "event_details")
 public class Event implements Serializable {
 
     @Id
@@ -33,9 +38,11 @@ public class Event implements Serializable {
     private final int screenId;
 
     @NotNull(message = "locationId can't be empty")
+    @Field(name = "locationId")
     private final String locationId;
 
     @NotNull(message = "eventId can't be empty")
+    @Field(name = "eventId")
     private final String eventId;
 
     @NotNull(message = "eventStartDate can't be empty")
@@ -64,7 +71,7 @@ public class Event implements Serializable {
 
 
     public void validate() {
-        if (eventStartDate.before(eventEndDate)) {
+        if (eventStartDate.after(eventEndDate)) {
             throw new ValidationException("eventStartDate can not be before eventEndDate");
         }
 

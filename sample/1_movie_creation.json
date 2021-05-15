@@ -1,0 +1,35 @@
+{
+
+  "detail": {
+    "description": "A loving grandson embarks on a complex mission to reunite his ailing grandmother with her ancestral home in Lahore.",
+    "members": [
+      {
+        "description": "Neena Gupta",
+        "memberType": "Cast",
+        "name": "Neena Gupta",
+        "role": "Actor"
+      },
+      {
+        "description": "John Gupta",
+        "memberType": "Cast",
+        "name": "John Gupta",
+        "role": "Producer"
+      }
+    ],
+    "releaseDate": "2021-05-14T15:08:06.901Z",
+    "language": "Bengali",
+    "movieType": "Action",
+    "promoLinks": [
+      "https://youtu.be/x0VYXVGCfZY"
+    ],
+    "bannerLocations": [
+      "/bucket/movie/12345/a.jpg",
+      "/bucket/movie/12345/b.jpg",
+      "/bucket/movie/12345/c.jpg",
+      "/bucket/movie/12345/d.jpg",
+      "/bucket/movie/12345/e.jpg"
+    ]
+  },
+
+  "name": "Escape the Virus"
+}

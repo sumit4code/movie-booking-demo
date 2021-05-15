@@ -30,9 +30,13 @@ Below modules have been identified as key module. Module description is given be
 
 ## API Documentation
 
-### Service : movie-store
+### Service : Movie-Store
 
 ![Screenshot](evidence/api/movie-store-api.png)
+
+### Service : Theater-Manager
+
+![Screenshot](evidence/api/theater-manager-api.png)
 
 ## Testing Evidence
 see documentation [here](./Testing.md)

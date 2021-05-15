@@ -25,7 +25,7 @@ import java.net.URI;
 @Slf4j
 @AllArgsConstructor
 @RequestMapping(value = "/api/v1/theater")
-@Api(value = "CRUD operation on theater", tags = {"API :: theater"})
+@Api(value = "CRUD operation on theater", tags = {"API :: Theater"})
 public class TheaterController {
 
     private final TheaterService theaterService;
