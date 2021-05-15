@@ -16,6 +16,11 @@ public class MovieDetail implements Serializable {
     @NotNull(message = "releaseDate can't be empty")
     private ZonedDateTime releaseDate;
     private List<Member> members;
-
+    private List<String> bannerLocations;
+    private List<String> promoLinks;
+    @NotNull
+    private MovieType movieType;
+    @NotNull
+    private Language language;
 
 }

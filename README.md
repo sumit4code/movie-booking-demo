@@ -32,7 +32,10 @@ Below modules have been identified as key module. Module description is given be
 
 ### Service : movie-store
 
-![Screenshot](./evidence/movie-store-api.png)
+![Screenshot](evidence/api/movie-store-api.png)
+
+## Testing Evidence
+see documentation [here](./Testing.md)
 
 
 ## License

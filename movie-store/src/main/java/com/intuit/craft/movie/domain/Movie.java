@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -29,6 +30,7 @@ public class Movie implements Serializable {
     @Field(name = "createdDate")
     private LocalDateTime createdDate;
 
+    @Indexed(expireAfterSeconds = 2592000)
     @LastModifiedDate
     @Field(name = "lastModifiedDate")
     private LocalDateTime lastModifiedDate;
