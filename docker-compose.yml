@@ -148,69 +148,69 @@ services:
 #    logging:
 #      driver: json-file
 
-#  movie-store:
-#    mem_limit: 256m
-#    mem_reservation: 60M
-#    cpus: 1
-#    build:
-#      context: ./movie-store/
-#      dockerfile: Dockerfile
-#    container_name: "movie_store"
-#    restart: always # This will be ignored if we deploy in docker swarm
-#    hostname: movie-store
-#    environment:
-#      - PROFILE=
-#      - MONGO_DB_HOSTNAME=mongodb-movie
-#      - MONGO_DB_USERNAME=intuit
-#      - MONGO_DB_PASSWORD=intuit123
-#      - MONGO_DB_NAME=movie
-#      - REDIS_HOST=10.0.0.11:7001,10.0.0.12:7002,10.0.0.13:7003,10.0.0.14:7004,10.0.0.15:7005,10.0.0.16:7006
-#    ports:
-#      - 8083:8083
-#    working_dir: /opt/app
-#    links:
-#      - mongodb-movie
-#    depends_on:
-#      - mongodb-movie
-#      - redis-cluster
-#    networks:
-#      - backend
-#      - redisnet
-#      - messaging_network
-#    healthcheck:
-#      test: "exit 0"
+  movie-store:
+    mem_limit: 256m
+    mem_reservation: 60M
+    cpus: 1
+    build:
+      context: ./movie-store/
+      dockerfile: Dockerfile
+    container_name: "movie_store"
+    restart: always # This will be ignored if we deploy in docker swarm
+    hostname: movie-store
+    environment:
+      - PROFILE=seed
+      - MONGO_DB_HOSTNAME=mongodb-movie
+      - MONGO_DB_USERNAME=intuit
+      - MONGO_DB_PASSWORD=intuit123
+      - MONGO_DB_NAME=movie
+      - REDIS_HOST=10.0.0.11:7001,10.0.0.12:7002,10.0.0.13:7003,10.0.0.14:7004,10.0.0.15:7005,10.0.0.16:7006
+    ports:
+      - 8083:8083
+    working_dir: /opt/app
+    links:
+      - mongodb-movie
+    depends_on:
+      - mongodb-movie
+      - redis-cluster
+    networks:
+      - backend
+      - redisnet
+      - messaging_network
+    healthcheck:
+      test: "exit 0"
 
-#  theater-manager:
-#    mem_limit: 256m
-#    mem_reservation: 60M
-#    cpus: 1
-#    build:
-#      context: ./theater-manager/
-#      dockerfile: Dockerfile
-#    container_name: "theater-manager"
-#    restart: always # This will be ignored if we deploy in docker swarm
-#    hostname: theater-manager
-#    environment:
-#      - PROFILE=
-#      - MONGO_DB_HOSTNAME=mongodb-movie
-#      - MONGO_DB_USERNAME=intuit
-#      - MONGO_DB_PASSWORD=intuit123
-#      - MONGO_DB_NAME=movie
-#      - REDIS_HOST=10.0.0.11:7001,10.0.0.12:7002,10.0.0.13:7003,10.0.0.14:7004,10.0.0.15:7005,10.0.0.16:7006
-#    ports:
-#      - 8084:8084
-#    working_dir: /opt/app
-#    links:
-#      - mongodb-movie
-#    depends_on:
-#      - mongodb-movie
-#      - redis-cluster
-#    networks:
-#      - backend
-#      - redisnet
-#      - messaging_network
-#    healthcheck:
-#      test: "exit 0"
+  theater-manager:
+    mem_limit: 256m
+    mem_reservation: 60M
+    cpus: 1
+    build:
+      context: ./theater-manager/
+      dockerfile: Dockerfile
+    container_name: "theater-manager"
+    restart: always # This will be ignored if we deploy in docker swarm
+    hostname: theater-manager
+    environment:
+      - PROFILE=seed
+      - MONGO_DB_HOSTNAME=mongodb-movie
+      - MONGO_DB_USERNAME=intuit
+      - MONGO_DB_PASSWORD=intuit123
+      - MONGO_DB_NAME=movie
+      - REDIS_HOST=10.0.0.11:7001,10.0.0.12:7002,10.0.0.13:7003,10.0.0.14:7004,10.0.0.15:7005,10.0.0.16:7006
+    ports:
+      - 8084:8084
+    working_dir: /opt/app
+    links:
+      - mongodb-movie
+    depends_on:
+      - mongodb-movie
+      - redis-cluster
+    networks:
+      - backend
+      - redisnet
+      - messaging_network
+    healthcheck:
+      test: "exit 0"
 
 
 volumes:

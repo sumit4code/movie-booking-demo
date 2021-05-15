@@ -1,4 +1,4 @@
-package com.intuit.craft.theater.domain;
+package com.intuit.craft.booking.domain;
 
 import lombok.Data;
 

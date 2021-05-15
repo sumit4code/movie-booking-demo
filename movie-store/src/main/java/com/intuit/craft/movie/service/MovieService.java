@@ -26,12 +26,14 @@ public class MovieService {
         }
         Movie savedMovie = movieRepository.insert(movie);
         log.info("Movie stored successfully");
+        //ToDO kafka send for analytics
         return savedMovie;
     }
 
     @CachePut(value = CACHE_NAME, key = "#movie.id")
     public Movie update(Movie movie) {
         if (movieRepository.existsById(movie.getId())) {
+            //ToDO kafka send for analytics
             return movieRepository.save(movie);
         }
         log.error("movie doesn't exist with id {}", movie.getId());

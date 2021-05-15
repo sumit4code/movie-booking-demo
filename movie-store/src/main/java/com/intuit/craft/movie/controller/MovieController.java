@@ -25,7 +25,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/api/v1/movie")
 @Validated
-@Api(value = "CRUD operation on movie", tags = {"movieOperation"})
+@Api(value = "CRUD operation on movie", tags = {"API :: Movie"})
 public class MovieController {
 
     private final MovieService movieService;
