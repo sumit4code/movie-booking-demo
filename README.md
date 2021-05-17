@@ -1,6 +1,11 @@
 # Movie-Booking-Parents
 This is a demo assignment simulating book my show.
 
+## Architecture
+<br />
+
+![Screenshot](./architecture.png)
+
 ## Modules
 Below modules have been identified as key module. Module description is given below.
 

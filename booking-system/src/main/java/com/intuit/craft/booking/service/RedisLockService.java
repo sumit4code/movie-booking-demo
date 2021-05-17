@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
@@ -39,5 +40,9 @@ public class RedisLockService {
 
     private Lock obtainLock(String lockKey) {
         return redisLockRegistry.obtain(lockKey);
+    }
+
+    public void releaseFirstLevelLocks(List<String> lockKeys) {
+        lockKeys.forEach(this::unlock);
     }
 }

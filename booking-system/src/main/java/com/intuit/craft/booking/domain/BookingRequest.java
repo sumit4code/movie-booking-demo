@@ -12,5 +12,6 @@ public class BookingRequest implements Serializable {
 
     private String bookingId;
     private String eventId;
+    private String subEventId;
     private List<Seat> seatNumbers;
 }

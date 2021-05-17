@@ -44,6 +44,7 @@ public class BookingController {
         if(granted){
             return ResponseEntity.ok().build();
         }
+        log.info("sending back response");
         return ResponseEntity.badRequest().build();
     }
 
