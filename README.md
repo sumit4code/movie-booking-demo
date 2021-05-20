@@ -43,6 +43,10 @@ Below modules have been identified as key module. Module description is given be
 
 ![Screenshot](evidence/api/theater-manager-api.png)
 
+### Service : Booking-System
+
+![Screenshot](evidence/api/booking-system.png)
+
 ## Testing Evidence
 see documentation [here](./Testing.md)
 

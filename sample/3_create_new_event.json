@@ -1,8 +1,8 @@
 {
   "eventEndDate": "2021-06-28",
-  "eventId": "1234",
+  "eventId": "60a59f6719ccc348ab0c4dd7",
   "eventStartDate": "2021-06-21",
-  "locationId": "609fd863e280227ce9ad6268",
+  "locationId": "60a59b4e827c457e1236a3bc",
   "schedules": [
     {
       "startTime": "12:30",
@@ -18,5 +18,5 @@
     }
   ],
   "screenId": 0,
-  "theaterId": "60a009c43026ff3a15756804"
+  "theaterId": "60a59fb8827c457e1236a3c4"
 }

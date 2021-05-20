@@ -1,5 +1,6 @@
 package com.intuit.craft.theater.service;
 
+import com.intuit.craft.exception.EntityNotFoundException;
 import com.intuit.craft.theater.domain.LocationInformation;
 import com.intuit.craft.theater.repository.LocationRepository;
 import lombok.AllArgsConstructor;
@@ -35,5 +36,9 @@ public class LocationService {
                         locationInformation1.getCountry()).isPresent())
                 .collect(Collectors.toList());
         return CollectionUtils.isNotEmpty(notPresentInDB) ? locationRepository.saveAll(notPresentInDB) : Collections.emptyList();
+    }
+
+    public LocationInformation getLocation(String locationId){
+        return locationRepository.findById(locationId).orElseThrow(()-> new EntityNotFoundException("not a valid location"));
     }
 }

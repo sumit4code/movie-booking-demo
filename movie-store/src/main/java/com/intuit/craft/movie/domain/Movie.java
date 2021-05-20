@@ -20,6 +20,7 @@ public class Movie implements Serializable {
     @Id
     private String id;
 
+    @Indexed(unique = true)
     @NotNull(message = "name can't be empty")
     @Field(name = "name")
     private String name;

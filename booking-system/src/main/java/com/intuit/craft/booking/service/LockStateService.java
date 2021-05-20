@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -48,11 +50,16 @@ public class LockStateService {
     }
 
     public void releaseUnProcessedLock(LockState lockState) {
-        log.debug("Request received for releasing unprocessed locks {}", lockState);
         if (lockState.getLockstatus() == LockStatus.Acquired || lockState.getLockstatus() == LockStatus.Initiated) {
             long configuredExpiryTime = (lockState.getLockType() == LockType.FIRST_LEVEL ? 300 : lockDuration) * 1000;
             if (lockState.getLastModifiedDate().toInstant(ZoneOffset.UTC).plusMillis(configuredExpiryTime).isAfter(Instant.now())) {
-                redisLockService.unlock(lockState.getLockId());
+                log.debug("Releasing unprocessed locks {}", lockState);
+                try {
+                    redisLockService.unlock(lockState.getLockId());
+                } catch (IllegalStateException e) {
+                    log.warn("Lock already released due to restart");
+                }
+                //ToDO release seats
                 lockState.setLockstatus(LockStatus.Released);
                 this.update(lockState);
                 log.info("Successfully released lock {}", lockState.getLockId());
@@ -64,4 +71,14 @@ public class LockStateService {
         lockKeys.forEach(redisLockService::unlock);
     }
 
+
+    public void releaseSecondLevelLockOnSuccessfulTransaction(String transactionId) {
+        Optional<LockState> lockStateOptional = lockStateRepository.findByTransactionIdAndLockType(transactionId, LockType.SECOND_LEVEL);
+        lockStateOptional.ifPresent(lockState -> {
+            log.info("Releasing lock for transaction id {} with lock key {}", transactionId, lockState.getLockId());
+            this.releaseLocks(Collections.singletonList(lockState.getLockId()));
+            lockState.setLockstatus(LockStatus.Released);
+            this.update(lockState);
+        });
+    }
 }

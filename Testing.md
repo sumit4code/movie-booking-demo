@@ -15,3 +15,9 @@ Module wise testing evidence is attached below
    ![Screenshot](./evidence/test/theater/verify_event_creation.png) <br /><br />
  - Search movie based on location and movie id i.e eventId 
    ![Screenshot](./evidence/test/theater/filter_events_based_on_location.png) <br /><br />
+ - After search lock the seats 
+   ![Screenshot](./evidence/test/booking/locking-seats.png) <br /><br />
+ - Veridy status as locked
+   ![Screenshot](./evidence/test/booking/verify_locked_status.png) <br /><br />
+ - Booking Success
+   ![Screenshot](./evidence/test/booking/success.png) <br /><br />

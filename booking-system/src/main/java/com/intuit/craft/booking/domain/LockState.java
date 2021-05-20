@@ -21,7 +21,10 @@ public class LockState implements Serializable {
     private String id;
     private String lockId;
     private LockStatus lockstatus;
+    @Field
     private LockType lockType;
+    @Field
+    private String transactionId;
 
     @CreatedDate
     @Field(name = "createdDate")

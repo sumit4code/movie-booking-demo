@@ -2,6 +2,7 @@ package com.intuit.craft.theater.service;
 
 import com.intuit.craft.exception.EntityNotFoundException;
 import com.intuit.craft.exception.ValidationException;
+import com.intuit.craft.theater.domain.LocationInformation;
 import com.intuit.craft.theater.domain.Screen;
 import com.intuit.craft.theater.domain.Theater;
 import com.intuit.craft.theater.repository.TheaterRepository;
@@ -19,12 +20,14 @@ public class TheaterService {
     private final static String CACHE_NAME = "theater";
 
     private final TheaterRepository theaterRepository;
+    private final LocationService locationService;
 
     public Theater create(Theater theater) {
         if (StringUtils.isNoneEmpty(theater.getId())) {
             throw new ValidationException("id should not be populated during create");
         }
         theater.getScreen().forEach(Screen::validate);
+        validateLocation(theater.getLocation());
         Theater savedMovie = theaterRepository.insert(theater);
         log.info("theater stored successfully");
         return savedMovie;
@@ -34,6 +37,7 @@ public class TheaterService {
     public Theater update(String id, Theater theater) {
         if (theaterRepository.existsById(id) && id.equalsIgnoreCase(theater.getId())) {
             theater.getScreen().forEach(Screen::validate);
+            validateLocation(theater.getLocation());
             return theaterRepository.save(theater);
         }
         log.error("theater doesn't exist with id {}", id);
@@ -45,5 +49,16 @@ public class TheaterService {
     public Theater get(String id) {
         log.info("requesting for theater id {}", id);
         return theaterRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Entity not found with id :" + id));
+    }
+
+    private void validateLocation(LocationInformation locationInformation) {
+        try {
+            LocationInformation location = locationService.getLocation(locationInformation.getId());
+            if (!location.equals(locationInformation)) {
+                throw new ValidationException("location data is not correct");
+            }
+        } catch (EntityNotFoundException e) {
+            throw new ValidationException("not a valid location");
+        }
     }
 }

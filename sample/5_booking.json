@@ -1,0 +1,20 @@
+{
+  "amount": 30,
+  "emailId": "sumit.das@jpmchase.com",
+  "mobileNumber": "8861208284",
+  "seats": [
+    {
+      "rowNumber": 0,
+      "seatNumber": 7
+    },
+    {
+      "rowNumber": 0,
+      "seatNumber": 8
+    }
+  ],
+  "subEventId": "126dd6c2-cd13-4e09-9f44-ba259bfff952",
+  "theaterId": "60a59f6719ccc348ab0c4dd7",
+  "transactionId": "60a59f6719ccc348ab0c4dd7"
+}
+
+

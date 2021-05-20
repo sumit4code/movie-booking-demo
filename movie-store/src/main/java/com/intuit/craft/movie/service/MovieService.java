@@ -1,5 +1,6 @@
 package com.intuit.craft.movie.service;
 
+import com.intuit.craft.exception.DuplicateEntityException;
 import com.intuit.craft.exception.EntityNotFoundException;
 import com.intuit.craft.exception.ValidationException;
 import com.intuit.craft.movie.domain.Movie;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -24,10 +26,15 @@ public class MovieService {
         if (StringUtils.isNoneEmpty(movie.getId())) {
             throw new ValidationException("id should not be populated during create");
         }
-        Movie savedMovie = movieRepository.insert(movie);
-        log.info("Movie stored successfully");
-        //ToDO kafka send for analytics
-        return savedMovie;
+        try{
+            Movie savedMovie = movieRepository.insert(movie);
+            log.info("Movie stored successfully");
+            //ToDO kafka send for analytics
+            return savedMovie;
+
+        }catch (DuplicateKeyException e){
+            throw new DuplicateEntityException(e.getMessage(), e);
+        }
     }
 
     @CachePut(value = CACHE_NAME, key = "#movie.id")

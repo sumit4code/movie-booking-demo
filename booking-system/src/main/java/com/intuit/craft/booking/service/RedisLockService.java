@@ -31,10 +31,12 @@ public class RedisLockService {
     public void unlock(String lockKey) {
         try {
             Lock lock = obtainLock(lockKey);
-            lock.unlock();
+            if (lock != null) {
+                lock.unlock();
+            }
             redisLockRegistry.expireUnusedOlderThan(DEFAULT_EXPIRE_UNUSED);
         } catch (Exception e) {
-            log.error("Error occurred during unlock {}", lockKey, e);
+            throw e;
         }
     }
 

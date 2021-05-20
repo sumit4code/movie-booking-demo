@@ -23,7 +23,8 @@ import java.util.List;
 @Data
 @Builder
 @CompoundIndexes({
-        @CompoundIndex(name = "location_subEvent", def = "{'locationId' : 1, 'eventId': 1}")
+        @CompoundIndex(name = "location_subEvent", def = "{'locationId' : 1, 'eventId': 1}"),
+        @CompoundIndex(name = "location_theaterId_eventId", def = "{'locationId' : 1, 'eventId': 1, 'theaterId':1}", unique = true)
 })
 @Document(collection = "event_details")
 public class Event implements Serializable {

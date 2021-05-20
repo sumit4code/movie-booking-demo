@@ -19,9 +19,11 @@ public class LockStateMonitor {
 
     @Scheduled(cron = "*/10 * * * * *")
     public void releasedUnProcessedLocks(){
+        log.info("Scheduler service started");
         Pageable pageRequest = PageRequest.of(0, 100);
 
         lockStateService.releaseUnProcessedLock(pageRequest);
+        log.info("Scheduler service end");
     }
 
 }

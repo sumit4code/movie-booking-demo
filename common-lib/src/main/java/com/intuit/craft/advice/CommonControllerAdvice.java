@@ -1,6 +1,6 @@
 package com.intuit.craft.advice;
 
-import com.intuit.craft.exception.DuplicateKeyException;
+import com.intuit.craft.exception.DuplicateEntityException;
 import com.intuit.craft.exception.EntityNotFoundException;
 import com.intuit.craft.exception.MovieBookingException;
 import com.intuit.craft.exception.ValidationException;
@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class CommonControllerAdvice extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(DuplicateKeyException.class)
-    public ResponseEntity<Object> handleDuplicateException(DuplicateKeyException ex) {
+    @ExceptionHandler(DuplicateEntityException.class)
+    public ResponseEntity<Object> handleDuplicateException(DuplicateEntityException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("message", "Already entity present");

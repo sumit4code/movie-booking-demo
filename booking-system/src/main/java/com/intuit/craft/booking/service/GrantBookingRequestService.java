@@ -1,6 +1,6 @@
 package com.intuit.craft.booking.service;
 
-import com.intuit.craft.booking.domain.BookingRequest;
+import com.intuit.craft.booking.domain.BookingLockRequest;
 import com.intuit.craft.booking.domain.EventSeatMapper;
 import com.intuit.craft.booking.domain.LockState;
 import com.intuit.craft.booking.domain.LockStatus;
@@ -38,16 +38,16 @@ public class GrantBookingRequestService {
         this.lockDuration = lockDuration;
     }
 
-    public boolean grant(BookingRequest bookingRequest) {
+    public boolean grant(String transactionId, BookingLockRequest bookingLockRequest) {
         boolean result = false;
-        List<String> firstLevelLockKeys = getLockKeys(bookingRequest, LockType.FIRST_LEVEL);
+        List<String> firstLevelLockKeys = getLockKeys(bookingLockRequest, LockType.FIRST_LEVEL);
         boolean firstLockGranted = grant(firstLevelLockKeys, FIRST_LEVEL_LOCK_DURATION_IN_SECONDS);
         if (firstLockGranted) {
-            List<String> secondLevelLockKeys = getLockKeys(bookingRequest, LockType.SECOND_LEVEL);
-            List<EventSeatMapper> requestedSeat = this.bookingEventService.retrieveRequestedSeat(bookingRequest);
-            if (requestedSeat.stream().noneMatch(eventSeatMapper -> eventSeatMapper.getStatus() == Booked)) {
+            List<String> secondLevelLockKeys = getLockKeys(bookingLockRequest, LockType.SECOND_LEVEL);
+            List<EventSeatMapper> requestedSeat = this.bookingEventService.retrieveRequestedSeat(bookingLockRequest);
+            if (requestedSeat.stream().noneMatch(eventSeatMapper -> eventSeatMapper.getStatus() == Booked || eventSeatMapper.getStatus() == Status.Locked)) {
                 log.info("Requested seats are available to proceed");
-                List<LockState> initiatedLockState = initSecondLevelLock(secondLevelLockKeys);
+                List<LockState> initiatedLockState = initSecondLevelLock(transactionId, secondLevelLockKeys);
                 if (grant(secondLevelLockKeys, lockDuration)) {
                     log.debug("Acquired log");
                     updateSecondLevelLockAsAcquired(initiatedLockState);
@@ -65,8 +65,11 @@ public class GrantBookingRequestService {
         lockStateService.saveAll(acquiredLocks);
     }
 
-    private List<LockState> initSecondLevelLock(List<String> secondLevelLockKeys) {
-        List<LockState> lockStates = secondLevelLockKeys.stream().map(s -> LockState.builder().lockId(s).lockType(LockType.SECOND_LEVEL).lockstatus(LockStatus.Initiated).build()).collect(Collectors.toList());
+    private List<LockState> initSecondLevelLock(String transactionId, List<String> secondLevelLockKeys) {
+        List<LockState> lockStates = secondLevelLockKeys.stream().map(s -> LockState.builder().lockId(s).lockType(LockType.SECOND_LEVEL)
+                .lockstatus(LockStatus.Initiated)
+                .transactionId(transactionId)
+                .build()).collect(Collectors.toList());
         return lockStateService.saveAll(lockStates);
     }
 
@@ -101,9 +104,9 @@ public class GrantBookingRequestService {
         log.info("Total lock seat count {}", lockedSeats.size());
     }
 
-    private List<String> getLockKeys(BookingRequest bookingRequest, LockType lockType) {
-        return bookingRequest.getSeatNumbers().stream()
-                .map(seat -> String.format(LOCK_KEY_FORMAT, bookingRequest.getEventId(), seat.getRowNumber(), seat.getSeatNumber(), lockType.name()))
+    private List<String> getLockKeys(BookingLockRequest bookingLockRequest, LockType lockType) {
+        return bookingLockRequest.getSeatNumbers().stream()
+                .map(seat -> String.format(LOCK_KEY_FORMAT, bookingLockRequest.getSubEventId(), seat.getRowNumber(), seat.getSeatNumber(), lockType.name()))
                 .collect(Collectors.toList());
     }
 
